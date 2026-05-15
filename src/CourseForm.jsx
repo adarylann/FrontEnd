@@ -27,7 +27,7 @@ const CourseForm = () => {
 
         try {
             const response = await fetch(
-                "https://express-node-agms43tx1-adarylanns-projects.vercel.app/submit",
+                "https://expressnodeapp-woke.onrender.com/submit",
                 {
                     method: "POST",
                     headers: {
@@ -49,12 +49,13 @@ const CourseForm = () => {
                     course: "",
                 });
             } else {
+                const errorText = await response.text();
+                console.error("API Error:", errorText);
                 alert("Failed to submit form. Please try again.");
-                console.error("API Error:", response.statusText);
             }
         } catch (error) {
+            console.error("Network Error:", error);
             alert("An error occurred while submitting the form.");
-            console.error("Error:", error);
         }
     };
 
