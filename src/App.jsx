@@ -1,12 +1,7 @@
-import React from "react";
-import TalentForm from "./TalentForm";
+import CourseForm from "./CourseForm";
 
 function App() {
-  return (
-    <div>
-      <TalentForm />
-    </div>
-  );
+  return <CourseForm />;
 }
 
 export default App;

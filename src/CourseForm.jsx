@@ -1,12 +1,12 @@
-import "./TalentForm.css";
+import "./CourseForm.css";
 import React, { useState } from "react";
 
-const TalentForm = () => {
+const CourseForm = () => {
     const [formData, setFormData] = useState({
         name: "",
         age: "",
         email: "",
-        talent: ""
+        course: "",
     });
 
     const handleChange = (e) => {
@@ -17,22 +17,45 @@ const TalentForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.talent) {
-            alert("Please select a talent before submitting!");
+        if (!formData.course) {
+            alert("Please select a course before submitting!");
             return;
         }
 
-        console.log("Form submitted: ", formData);
+        try {
+            const response = await fetch(
+                "https://express-node-agms43tx1-adarylanns-projects.vercel.app/submit",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                }
+            );
 
-        setFormData({
-            name: "",
-            age: "",
-            email: "",
-            talent: ""
-        });
+            if (response.ok) {
+                const result = await response.json();
+                alert("Form submitted successfully!");
+                console.log("API Response:", result);
+
+                setFormData({
+                    name: "",
+                    age: "",
+                    email: "",
+                    course: "",
+                });
+            } else {
+                alert("Failed to submit form. Please try again.");
+                console.error("API Error:", response.statusText);
+            }
+        } catch (error) {
+            alert("An error occurred while submitting the form.");
+            console.error("Error:", error);
+        }
     };
 
     return (
@@ -42,10 +65,8 @@ const TalentForm = () => {
                 <p>Ensure all details are correct and final before submitting.</p>
 
                 <form onSubmit={handleSubmit}>
-
-                    {/* Name input field */}
                     <div className="form-field">
-                        <label htmlFor="name">Name: </label> 
+                        <label htmlFor="name">Name:</label>
                         <input
                             type="text"
                             id="name"
@@ -57,9 +78,8 @@ const TalentForm = () => {
                         />
                     </div>
 
-                    {/* Age input field */}
                     <div className="form-field">
-                        <label htmlFor="age">Age: </label> 
+                        <label htmlFor="age">Age:</label>
                         <input
                             type="number"
                             id="age"
@@ -71,9 +91,8 @@ const TalentForm = () => {
                         />
                     </div>
 
-                    {/* Email input field */}
-                    <div className = "form-field">
-                        <label htmlform="email">Email: </label>
+                    <div className="form-field">
+                        <label htmlFor="email">Email:</label>
                         <input
                             type="email"
                             id="email"
@@ -85,34 +104,35 @@ const TalentForm = () => {
                         />
                     </div>
 
-                    {/* Talent input field */}
-                    <div className = "form-field">
-                        <label htmlform="talent">Course: </label>
+                    <div className="form-field">
+                        <label htmlFor="course">Course:</label>
                         <select
-                            id="talent"
-                            name="talent"
-                            value={formData.talent}
+                            id="course"
+                            name="course"
+                            value={formData.course}
                             onChange={handleChange}
                             required
                         >
-                            <option value ="disabled">
-                                Select course
+                            <option value="">Select course</option>
+                            <option value="computer-engineering">
+                                Bachelor of Science in Computer Engineering
                             </option>
-                            <option value="singing">Bachelor of Science in Computer Engineering</option>
-                            <option value="singing">Bachelor of Science in Industrial Engineering</option>
-                            <option value="singing">Bachelor of Science in Information Technology</option>
+                            <option value="industrial-engineering">
+                                Bachelor of Science in Industrial Engineering
+                            </option>
+                            <option value="information-technology">
+                                Bachelor of Science in Information Technology
+                            </option>
                         </select>
                     </div>
 
-                    {/* Submit button */}
                     <button type="submit" className="Submit-button">
                         Submit
                     </button>
-
                 </form>
             </div>
         </div>
     );
 };
 
-export default TalentForm;
+export default CourseForm;
